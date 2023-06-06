@@ -119,14 +119,23 @@ if __name__ == "__main__":
     server_config_path = so_dir / f"server{args.server_number}.conf"
     with server_config_path.open("w") as f:
         f.write(generator.server_config.dumps())
-
-    for group in groups:
-        justified_groups = str(group).rjust(int(log10(len(groups))) + 1, "0")
-        group_config_dir = so_dir / f"{args.group_name}{justified_groups}"
+    if args.single_peer:
+        group_config_dir = so_dir / f"{args.group_name}"
         group_config_dir.mkdir()
-        group_configs = generator.peer_configs[group]
-        for peer, conf in group_configs.items():
-            justified_peer = str(peer + 1).rjust(int(log10(len(group_configs))) + 1, "0")
-            peer_config_path = Path(group_config_dir) / f"{args.group_name}{justified_groups}_{justified_peer}.conf"
+        for group in groups:
+            justified_groups = str(group).rjust(int(log10(len(groups))) + 1, "0")
+            peer_config_path = group_config_dir / f"{args.group_name}{justified_groups}.conf"
             with peer_config_path.open("w") as f:
+                conf = generator.peer_configs[group][0]
                 f.write(conf.dumps())
+    else:
+        for group in groups:
+            justified_groups = str(group).rjust(int(log10(len(groups))) + 1, "0")
+            group_config_dir = so_dir / f"{args.group_name}{justified_groups}"
+            group_config_dir.mkdir()
+            group_configs = generator.peer_configs[group]
+            for peer, conf in group_configs.items():
+                justified_peer = str(peer + 1).rjust(int(log10(len(group_configs))) + 1, "0")
+                peer_config_path = Path(group_config_dir) / f"{args.group_name}{justified_groups}_{justified_peer}.conf"
+                with peer_config_path.open("w") as f:
+                    f.write(conf.dumps())
