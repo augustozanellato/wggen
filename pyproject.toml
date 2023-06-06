@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "wggen"
+version = "0.1.0"
+description = ""
+authors = ["Augusto Zanellato <augusto.zanellato@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+netaddr = "^0.8.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+ruff = "^0.0.270"
+
+[tool.ruff]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "PTH", "PL", "TRY", "RUF", "ERA", "Q", "N", "ANN"]
+ignore = ["TRY003", "ANN101", "ANN102", "ANN204", "PLR0913"]
+line-length = 120
+target-version = "py310"
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
