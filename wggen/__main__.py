@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 import re
 import sys
 from math import log10
@@ -123,8 +122,7 @@ if __name__ == "__main__":
         group_config_dir = so_dir / f"{args.group_name}"
         group_config_dir.mkdir()
         for group in groups:
-            justified_groups = str(group).rjust(int(log10(len(groups))) + 1, "0")
-            peer_config_path = group_config_dir / f"{args.group_name}{justified_groups}.conf"
+            peer_config_path = group_config_dir / f"{args.group_name}{group}.conf"
             with peer_config_path.open("w") as f:
                 conf = generator.peer_configs[group][0]
                 f.write(conf.dumps())
