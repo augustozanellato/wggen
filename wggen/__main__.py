@@ -70,6 +70,14 @@ if __name__ == "__main__":
         help='Name of the group (e.g. "team") for peer comment (default "group")',
     )
 
+    parser.add_argument(
+        "--group-file-name",
+        type=str,
+        default=None,
+        metavar="NAME",
+        help="Configuration file name prefix (default group-name+'_')",
+    )
+
     parser.add_argument("--server-output", type=str, help="A path to dump configs to", required=True)
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -129,11 +137,13 @@ if __name__ == "__main__":
     else:
         for group in groups:
             justified_groups = str(group).rjust(int(log10(len(groups))) + 1, "0")
+
+            group_prefix = args.group_file_name or (args.group_name + justified_groups + '_')
             group_config_dir = so_dir / f"{args.group_name}{justified_groups}"
             group_config_dir.mkdir()
             group_configs = generator.peer_configs[group]
             for peer, conf in group_configs.items():
                 justified_peer = str(peer + 1).rjust(int(log10(len(group_configs))) + 1, "0")
-                peer_config_path = Path(group_config_dir) / f"{args.group_name}{justified_groups}_{justified_peer}.conf"
+                peer_config_path = Path(group_config_dir) / f"{group_prefix}{justified_peer}.conf"
                 with peer_config_path.open("w") as f:
                     f.write(conf.dumps())
