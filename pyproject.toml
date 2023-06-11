@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "wggen"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Augusto Zanellato <augusto.zanellato@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-netaddr = "^0.8.0"
+wireguard-tools = "^0.4.2"
 
 
 [tool.poetry.group.dev.dependencies]
