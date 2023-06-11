@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wggen"
-version = "0.2.0"
+version = "0.2.1"
 description = ""
 authors = ["Augusto Zanellato <augusto.zanellato@gmail.com>"]
 readme = "README.md"

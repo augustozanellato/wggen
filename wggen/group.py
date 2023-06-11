@@ -5,12 +5,6 @@ from wggen.client import WGClient
 from wggen.server import WGServer
 
 
-@dataclass(slots=True, frozen=True)
-class Peer:
-    name: str
-    address: IPv4Address
-
-
 @dataclass(slots=True)
 class SubGroup:
     name: str
@@ -21,7 +15,7 @@ class SubGroup:
 
     def generate_configs(self, server: WGServer) -> None:
         if self.peer_count == 1:
-            self.configs = [WGClient(server, self.name, self.subnet[1])]
+            self.configs = [WGClient(server, self.file_prefix, self.subnet[1])]
         else:
             self.configs = [
                 WGClient(server, f"{self.file_prefix}{i}", self.subnet[i]) for i in range(1, self.peer_count + 1)
@@ -30,7 +24,7 @@ class SubGroup:
 
 @dataclass(slots=True)
 class Group:
-    prefix: str
+    name: str
     subnet: IPv4Network
     subgroup_count: int
     subgroup_bits: int
@@ -40,14 +34,27 @@ class Group:
 
     def __post_init__(self) -> None:
         if self.has_subgroups:
-            subgroups = [
-                SubGroup(f"{self.prefix}{i}", subnet, self.file_prefix or f"{self.prefix}{i}_", self.peers_per_subgroup)
-                for i, subnet in zip(
-                    range(self.subgroup_count), self.subnet.subnets(new_prefix=self.subgroup_bits), strict=False
-                )
-            ]
+            if self.single_peer_per_subgroup:
+                subgroups = [
+                    SubGroup(
+                        f"{self.name}{i}",
+                        subnet,
+                        f"{self.file_prefix}{i}" if self.file_prefix else f"{self.name}{i}",
+                        self.peers_per_subgroup,
+                    )
+                    for i, subnet in zip(
+                        range(self.subgroup_count), self.subnet.subnets(new_prefix=self.subgroup_bits), strict=False
+                    )
+                ]
+            else:
+                subgroups = [
+                    SubGroup(f"{self.name}{i}", subnet, self.file_prefix or f"{self.name}{i}_", self.peers_per_subgroup)
+                    for i, subnet in zip(
+                        range(self.subgroup_count), self.subnet.subnets(new_prefix=self.subgroup_bits), strict=False
+                    )
+                ]
         else:
-            subgroups = [SubGroup(self.prefix, self.subnet, self.file_prefix or self.prefix, self.peers_per_subgroup)]
+            subgroups = [SubGroup(self.name, self.subnet, self.file_prefix or self.name, self.peers_per_subgroup)]
         self.subgroups = subgroups
 
     @property

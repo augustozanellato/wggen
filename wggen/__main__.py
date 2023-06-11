@@ -112,7 +112,7 @@ if __name__ == "__main__":
         f.write(server.config.to_wgconfig(wgquick_format=True))
 
     for group in groups:
-        group_path = out_dir / group.prefix
+        group_path = out_dir / group.name
         group_path.mkdir()
         for subgroup in group.subgroups:
             subgroup_path = (
