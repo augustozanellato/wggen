@@ -48,6 +48,13 @@ if __name__ == "__main__":
         help="Gamesystem subnet, GS will be at .1 (Defaults to 10.10.0.0/24)",
     )
     parser.add_argument(
+        "--monitoring-subnet",
+        type=str,
+        metavar="0.0.0.0/0",
+        default="10.11.0.0/24",
+        help="Monitoring subnet, box will be at .1 (Defaults to 10.11.0.0/24)",
+    )
+    parser.add_argument(
         "--jury-subnet",
         type=str,
         metavar="0.0.0.0/0",
@@ -83,11 +90,13 @@ if __name__ == "__main__":
     vulnbox_network = IPv4Network(args.vulnboxes_subnet)
     gamesystem_network = IPv4Network(args.gamesystem_subnet)
     jury_network = IPv4Network(args.jury_subnet)
+    monitoring_network = IPv4Network(args.monitoring_subnet)
 
     groups = [
         Group("team", team_network, args.team_count + 1, 24, args.team_size, "player"),
         Group("vulnbox", vulnbox_network, args.team_count + 1, 24, 1, "vulnbox-team"),
         Group("gamesystem", gamesystem_network, 1, 24, 1),
+        Group("monitoring", monitoring_network, 1, 24, 1),
         Group("jury", jury_network, 1, 24, args.jury_count),
     ]
     server = WGServer(args.server, args.server_port, args.router_ip)
