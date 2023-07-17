@@ -25,8 +25,7 @@ class SubGroup:
                     server,
                     self.file_prefix,
                     self.subnet[1],
-                    self.file_prefix,
-                    friendly_json | {"client": self.file_prefix},
+                    friendly_json=friendly_json | {"client": self.file_prefix, "friendly_name": self.file_prefix},
                 )
             ]
         else:
@@ -35,8 +34,7 @@ class SubGroup:
                     server,
                     f"{self.file_prefix}{i}",
                     self.subnet[i],
-                    f"{self.name}_{self.file_prefix}{i}",
-                    friendly_json | {"client": f"{self.file_prefix}{i}"},
+                    friendly_json=friendly_json | {"client": f"{self.file_prefix}{i}", "friendly_name": f"{self.name}_{self.file_prefix}{i}"},
                 )
                 for i in range(1, self.peer_count + 1)
             ]
