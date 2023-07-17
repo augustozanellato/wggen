@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     groups = [
         Group("team", team_network, args.team_count + 1, 24, args.team_size, "player"),
-        Group("vulnbox", vulnbox_network, args.team_count + 1, 24, 1, "vulnbox-team"),
+        Group("vulnbox", vulnbox_network, args.team_count + 1, 24, 1, "vulnbox-team", "team"),
         Group("gamesystem", gamesystem_network, 1, 24, 1),
         Group("monitoring", monitoring_network, 1, 24, 1),
         Group("jury", jury_network, 1, 24, args.jury_count),

@@ -12,12 +12,13 @@ class SubGroup:
     subnet: IPv4Network
     file_prefix: str
     peer_count: int
+    subgroup_json_override: str | None = None
     configs: list[WGClient] = field(init=False)
 
     def generate_configs(self, server: WGServer) -> None:
         friendly_json = {
             "group": self.group,
-            "subgroup": self.name,
+            "subgroup": self.subgroup_json_override or self.name,
         }
         if self.peer_count == 1:
             self.configs = [
@@ -48,6 +49,7 @@ class Group:
     subgroup_bits: int
     peers_per_subgroup: int
     file_prefix: str | None = None
+    subgroup_json_prefix: str | None = None
     subgroups: list[SubGroup] = field(init=False)
 
     def __post_init__(self) -> None:
@@ -60,6 +62,7 @@ class Group:
                         subnet,
                         f"{self.file_prefix}{i}" if self.file_prefix else f"{self.name}{i}",
                         self.peers_per_subgroup,
+                        f"{self.subgroup_json_prefix}{i}" if self.subgroup_json_prefix else None,
                     )
                     for i, subnet in zip(
                         range(self.subgroup_count), self.subnet.subnets(new_prefix=self.subgroup_bits), strict=False
@@ -73,6 +76,7 @@ class Group:
                         subnet,
                         self.file_prefix or f"{self.name}{i}_",
                         self.peers_per_subgroup,
+                        f"{self.subgroup_json_prefix}{i}" if self.subgroup_json_prefix else None,
                     )
                     for i, subnet in zip(
                         range(self.subgroup_count), self.subnet.subnets(new_prefix=self.subgroup_bits), strict=False
