@@ -65,7 +65,7 @@ class Group:
                         f"{self.subgroup_json_prefix}{i}" if self.subgroup_json_prefix else None,
                     )
                     for i, subnet in zip(
-                        range(1, self.subgroup_count + 1), list(self.subnet.subnets(new_prefix=self.subgroup_bits))[1:], strict=False
+                        range(1, self.subgroup_count), list(self.subnet.subnets(new_prefix=self.subgroup_bits))[1:], strict=False
                     )
                 ]
             else:
@@ -79,7 +79,7 @@ class Group:
                         f"{self.subgroup_json_prefix}{i}" if self.subgroup_json_prefix else None,
                     )
                     for i, subnet in zip(
-                        range(1, self.subgroup_count + 1), list(self.subnet.subnets(new_prefix=self.subgroup_bits))[1:], strict=False
+                        range(1, self.subgroup_count), list(self.subnet.subnets(new_prefix=self.subgroup_bits))[1:], strict=False
                     )
                 ]
         else:
